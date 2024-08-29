@@ -56,13 +56,13 @@
         class="absolute bottom-0 left-0 right-0 flex justify-center space-x-2"
       >
         <button
-          class="bg-white p-4 rounded-xl mb-6 shadow-xl font-semibold border-b-4 border-sky-500 text-xl flex items-center justify-center"
+          class="bg-white p-4 rounded-xl mb-6 shadow-xl font-semibold border-b-4 active:border-y-2 border-sky-500 text-xl flex items-center justify-center"
           @click="newGame"
         >
           <SvgRestart class="w-5 h-5 text-xl" />
         </button>
         <div
-          class="bg-white rounded-xl mb-6 shadow-xl font-semibold border-b-4 border-sky-500 text-xl w-24 flex justify-center items-center"
+          class="bg-white rounded-xl mb-6 h-14 shadow-xl font-semibold border-b-4 border-sky-500 text-xl w-24 flex justify-center items-center"
         >
           <Clock ref="stopwatchRef" />
         </div>

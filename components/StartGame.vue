@@ -15,9 +15,9 @@
       </div>
     </div>
     <button
-      class=" rounded-xl flex items-center justify-center py-3 px-6 border-b-4 border-[#936e24]"
+      class="rounded-xl flex items-center justify-center py-3 px-6 border-b-4 border-[#936e24] active:border-y-2"
       @click="startGame"
-      :class="isMapLoaded ? 'bg-[#FABC3F]':'bg-[#9a8763]'"
+      :class="isMapLoaded ? 'bg-[#FABC3F]' : 'bg-[#9a8763]'"
       :disabled="!isMapLoaded"
     >
       <SvgPlay class="text-white size-10" />
@@ -30,11 +30,11 @@ import SvgPlay from '@/components/icons/Play.vue';
 import SvgThailand from '@/components/icons/thailand.svg';
 
 const props = defineProps({
-    isMapLoaded: {
-        type: Boolean,
-        default: false
-    }
-})
+  isMapLoaded: {
+    type: Boolean,
+    default: false,
+  },
+});
 
 // const isHome = defineModel({
 //   type: Boolean,
@@ -44,7 +44,9 @@ const emits = defineEmits(['start']);
 
 const startGame = () => {
   console.log('start game');
-  emits('start');
+  setTimeout(() => {
+      emits('start');
+  }, 1000);
 };
 </script>
 
