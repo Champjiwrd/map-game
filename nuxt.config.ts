@@ -1,6 +1,20 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   app: {
+    head: {
+      title: 'Province Thailand - map game',
+      meta: [
+        { charset: 'utf-8' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        {
+          hid: 'description',
+          name: 'Province Thailand',
+          content: 'ทายจังหวัด',
+        },
+      ],
+      link: [{ rel: 'icon', type: 'image/x-icon', href: '/map-game/favicon.ico' }],
+    },
+
     baseURL: '/map-game/', // Ensure this matches your GitHub repository name
   },
   compatibilityDate: '2024-04-03',

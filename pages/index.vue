@@ -431,6 +431,7 @@ const onLoad = async (mapLoad) => {
   map.Ui.Scale.visible(false);
   map.Renderer.dragRotate.disable();
   map.Renderer.doubleClickZoom.disable();
+  map.Renderer.boxZoom.disable()
   // map.Layers.setBase(window.longdo.Layers.CLEAR);
 
   const backgroundOnlyStyle = {
@@ -600,7 +601,7 @@ const onIncorrect = (e) => {
     inCorrectContainer.value.classList.remove('apply-shake');
   }, 1000);
 
-  var popup3 = new longdo.Popup(
+  var popupProvince = new longdo.Popup(
     { lat: e.lngLat.lat, lon: e.lngLat.lng },
     {
       title: e.features[0].properties.pro_th,
@@ -609,9 +610,9 @@ const onIncorrect = (e) => {
     }
   );
 
-  map.Overlays.add(popup3);
+  map.Overlays.add(popupProvince);
   setTimeout(() => {
-    map.Overlays.remove(popup3);
+    map.Overlays.remove(popupProvince);
   }, 1000);
 
   attempt.value += 1;
