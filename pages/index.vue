@@ -6,7 +6,12 @@
       @load="onLoad"
       ui="Mobile"
     >
-      <FinishSummary v-if="isFinish" :score="score" :mapUrl="mapUrl" @newGame="newGame" />
+      <FinishSummary
+        v-if="isFinish"
+        :score="score"
+        :mapUrl="mapUrl"
+        @newGame="newGame"
+      />
       <div class="absolute top-0 left-0 right-0 flex flex-col">
         <div class="flex px-4 space-x-2 mt-6">
           <div ref="heartContainer">
@@ -440,7 +445,6 @@ const onLoad = async (mapLoad) => {
   }, 500);
 };
 const newGame = () => {
-  getLayerImage();
   attempt.value = 0;
   isFinish.value = false;
   randomProvince();
@@ -461,7 +465,7 @@ const newGame = () => {
   ]);
 };
 const finishGame = () => {
-  getLayerImage()
+  getLayerImage();
   stopwatchRef.value.startStopwatch();
   isFinish.value = true;
   setTimeout(() => {
@@ -693,7 +697,7 @@ const takeScreenshot = async (layerIds) => {
       }
     });
 
-    map.Renderer.fitBounds(boundsThailand, { padding: 0 });
+    map.Renderer.fitBounds(boundsThailand, { padding: 0, linear: true });
 
     // Set the background to transparent
     map.Renderer.setPaintProperty(
@@ -702,43 +706,45 @@ const takeScreenshot = async (layerIds) => {
       'rgba(0,0,0,0)'
     );
 
-    // Trigger render and wait for completion
-    map.Renderer.once('render', async function () {
-      console.log('Render completed');
+    setTimeout(() => {
+      map.Renderer.once('render', async function () {
+        console.log('Render completed');
 
-      // Capture the screenshot from the canvas
-      const dataUrl = map.Renderer.getCanvas().toDataURL();
+        // Capture the screenshot from the canvas
+        const dataUrl = map.Renderer.getCanvas().toDataURL();
 
-      // Restore the original visibility of each layer
-      layers.forEach((layer) => {
-        if (!layerIds.includes(layer.id)) {
-          map.Renderer.setLayoutProperty(
-            layer.id,
-            'visibility',
-            visibility[layer.id]
-          );
-        }
+        // Restore the original visibility of each layer
+        layers.forEach((layer) => {
+          if (!layerIds.includes(layer.id)) {
+            map.Renderer.setLayoutProperty(
+              layer.id,
+              'visibility',
+              visibility[layer.id]
+            );
+          }
+        });
+
+        // Restore the background color
+        map.Renderer.setPaintProperty(
+          'background',
+          'background-color',
+          'original_color_value'
+        );
+
+        resolve(dataUrl);
       });
 
-      // Restore the background color
-      map.Renderer.setPaintProperty(
-        'background',
-        'background-color',
-        'original_color_value'
-      );
-
-      resolve(dataUrl);
-    });
-
-    // Trigger a render to apply changes
-    map.Renderer.setBearing(map.Renderer.getBearing());
+      // Trigger a render to apply changes
+      map.Renderer.setBearing(map.Renderer.getBearing());
+    }, 1000);
+    // Trigger render and wait for completion
   });
 };
 const getLayerImage = async () => {
   console.log(map.Layers.list());
   const dataUrl = await takeScreenshot(['state-fills', 'state-border']);
 
-  mapUrl.value = dataUrl
+  mapUrl.value = dataUrl;
   // const link = document.createElement('a');
   // link.href = dataUrl;
   // link.download = 'map.png';
