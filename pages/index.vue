@@ -6,19 +6,20 @@
       @load="onLoad"
       ui="Mobile"
     >
+      <StartGame v-if="isHome" @start="newGame" />
       <FinishSummary
         v-if="isFinish"
         :score="score"
         :mapUrl="mapUrl"
         @newGame="newGame"
       />
-      <div class="absolute top-0 left-0 right-0 flex flex-col">
-        <div class="flex px-4 space-x-2 mt-6">
+      <div class="absolute top-0 left-0 right-0 flex flex-col justify-center">
+        <div class="flex px-4 space-x-2 mt-6 justify-center">
           <div ref="heartContainer">
             <HeartContainer :attempt="attempt" />
           </div>
           <div
-            class="bg-white p-4 rounded-xl shadow-xl font-semibold border-b-4 border-sky-500 text-xl flex items-center w-full"
+            class="bg-white p-4 rounded-xl shadow-xl font-semibold border-b-4 border-sky-500 text-xl flex items-center w-full max-w-md"
           >
             <div class="bg-gray-200 w-[100%] h-4 p-0.5">
               <div
@@ -98,6 +99,7 @@
 import SvgRestart from '@/components/icons/Restart.vue';
 import Clock from '@/components/Clock.vue';
 import FinishSummary from '@/components/FinishSummary.vue';
+import StartGame from '@/components/StartGame.vue';
 import HeartContainer from '@/components/HeartContainer.vue';
 
 let map;
@@ -376,6 +378,7 @@ const heartContainer = ref(undefined);
 const isFinish = ref(false);
 const mapUrl = ref('');
 const score = ref(0);
+const isHome = ref(true);
 
 const stopwatchRef = ref(null);
 
@@ -446,12 +449,14 @@ const onLoad = async (mapLoad) => {
 };
 const newGame = () => {
   attempt.value = 0;
+  stopwatchRef.value.resetStopwatch();
+  stopwatchRef.value.startStopwatch();
+  isHome.value = false;
   isFinish.value = false;
   randomProvince();
   correctProvince.value = [];
   incorrectProvince.value = [];
   currentProvinceQuestion.value = 0;
-  stopwatchRef.value.resetStopwatch();
   map.Renderer.setPaintProperty('state-fills', 'fill-color', [
     'case',
     ['any', ...correctProvince.value],
@@ -539,7 +544,6 @@ const addLayer = (geojson) => {
 
 const stateFillsClick = (e) => {
   console.log(e.features[0].properties);
-  if (!stopwatchRef.value.isRunning) stopwatchRef.value.startStopwatch();
   if (
     e.features[0].properties.pro_code ===
     provinceList.value[randomProvinceList.value[currentProvinceQuestion.value]]
