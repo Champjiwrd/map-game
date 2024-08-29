@@ -53,6 +53,7 @@ defineExpose({
   isRunning,
   startStopwatch,
   resetStopwatch,
+  formattedTime,
 });
 </script>
 

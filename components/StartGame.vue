@@ -15,8 +15,10 @@
       </div>
     </div>
     <button
-      class="bg-[#FABC3F] rounded-xl flex items-center justify-center py-3 px-6 border-b-4 border-[#936e24]"
+      class=" rounded-xl flex items-center justify-center py-3 px-6 border-b-4 border-[#936e24]"
       @click="startGame"
+      :class="isMapLoaded ? 'bg-[#FABC3F]':'bg-[#9a8763]'"
+      :disabled="!isMapLoaded"
     >
       <SvgPlay class="text-white size-10" />
     </button>
@@ -25,8 +27,14 @@
 
 <script setup>
 import SvgPlay from '@/components/icons/Play.vue';
-import SvgThailand from '@/components/icons/Thailand.svg';
-import SvgWorld from '@/components/icons/world.svg';
+import SvgThailand from '@/components/icons/thailand.svg';
+
+const props = defineProps({
+    isMapLoaded: {
+        type: Boolean,
+        default: false
+    }
+})
 
 // const isHome = defineModel({
 //   type: Boolean,

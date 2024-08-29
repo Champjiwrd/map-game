@@ -6,11 +6,12 @@
       @load="onLoad"
       ui="Mobile"
     >
-      <StartGame v-if="isHome" @start="newGame" />
+      <StartGame v-if="isHome" :is-map-loaded="isMapLoaded" @start="newGame" />
       <FinishSummary
         v-if="isFinish"
         :score="score"
         :mapUrl="mapUrl"
+        :time="stopwatchRef?.formattedTime"
         @newGame="newGame"
       />
       <div class="absolute top-0 left-0 right-0 flex flex-col justify-center">
@@ -376,6 +377,7 @@ const randomProvinceList = ref([]);
 const attempt = ref(0);
 const heartContainer = ref(undefined);
 const isFinish = ref(false);
+const isMapLoaded = ref(false);
 const mapUrl = ref('');
 const score = ref(0);
 const isHome = ref(true);
@@ -446,6 +448,7 @@ const onLoad = async (mapLoad) => {
     randomProvince();
     await readFile();
   }, 500);
+  isMapLoaded.value = true;
 };
 const newGame = () => {
   attempt.value = 0;
