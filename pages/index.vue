@@ -423,7 +423,7 @@ const onLoad = async (mapLoad) => {
     [105.6393, 20.4632],
   ];
   map.Renderer.fitBounds(boundsThailand, {
-    padding: { top: 150, bottom: 100 },
+    padding: { top: 150, bottom: 100, left:15, right:15 },
   });
   setTimeout(async () => {
     map.zoomRange({ min: map.zoom(), max: 8 });
