@@ -5,14 +5,20 @@ export default defineNuxtConfig({
       title: 'Province Thailand - map game',
       meta: [
         { charset: 'utf-8' },
-        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        {
+          name: 'viewport',
+          content:
+            'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0',
+        },
         {
           hid: 'description',
           name: 'Province Thailand',
           content: 'ทายจังหวัด',
         },
       ],
-      link: [{ rel: 'icon', type: 'image/x-icon', href: '/map-game/favicon.ico' }],
+      link: [
+        { rel: 'icon', type: 'image/x-icon', href: '/map-game/favicon.ico' },
+      ],
     },
 
     baseURL: '/map-game/', // Ensure this matches your GitHub repository name
