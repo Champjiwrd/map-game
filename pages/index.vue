@@ -6,7 +6,7 @@
       @load="onLoad"
       ui="Mobile"
     >
-      <FinishSummary v-if="isFinish" :score="score" @newGame="newGame" />
+      <FinishSummary v-if="isFinish" :score="score" :mapUrl="mapUrl" @newGame="newGame" />
       <div class="absolute top-0 left-0 right-0 flex flex-col">
         <div class="flex px-4 space-x-2 mt-6">
           <div ref="heartContainer">
@@ -369,9 +369,15 @@ const randomProvinceList = ref([]);
 const attempt = ref(0);
 const heartContainer = ref(undefined);
 const isFinish = ref(false);
+const mapUrl = ref('');
 const score = ref(0);
 
 const stopwatchRef = ref(null);
+
+const boundsThailand = [
+  [97.34466, 5.61],
+  [105.6393, 20.4632],
+];
 
 // colors
 const colors = {
@@ -418,12 +424,8 @@ const onLoad = async (mapLoad) => {
     e.preventDefault();
   });
 
-  const boundsThailand = [
-    [97.34466, 5.61],
-    [105.6393, 20.4632],
-  ];
   map.Renderer.fitBounds(boundsThailand, {
-    padding: { top: 150, bottom: 100, left:15, right:15 },
+    padding: { top: 150, bottom: 100, left: 15, right: 15 },
   });
   setTimeout(async () => {
     map.zoomRange({ min: map.zoom(), max: 8 });
@@ -438,6 +440,7 @@ const onLoad = async (mapLoad) => {
   }, 500);
 };
 const newGame = () => {
+  getLayerImage();
   attempt.value = 0;
   isFinish.value = false;
   randomProvince();
@@ -458,6 +461,7 @@ const newGame = () => {
   ]);
 };
 const finishGame = () => {
+  getLayerImage()
   stopwatchRef.value.startStopwatch();
   isFinish.value = true;
   setTimeout(() => {
@@ -670,32 +674,77 @@ const randomProvince = () => {
   console.log(provinceList.value);
   currentProvinceQuestion.value = 0;
 };
-const takeScreenshot = async () => {
+const takeScreenshot = async (layerIds) => {
   console.log('take screenshot');
-  return new Promise(function (resolve, reject) {
-    map.Renderer.once('render', function () {
-      console.log('render');
-      map.Renderer.on('load', async function () {
-        console.log('sleep');
-        await sleep(2000);
-        console.log('load');
-        resolve(map.Renderer.getCanvas().toDataURL());
-      });
+
+  return new Promise((resolve, reject) => {
+    // Retrieve the map's layers using the Renderer
+    const layers = map.Renderer.getStyle().layers; // You may still need to use map.getStyle() to get the layer details
+    const visibility = {};
+
+    // Store the original visibility of each layer and hide layers not in the specified layerIds array
+    layers.forEach((layer) => {
+      if (!layerIds.includes(layer.id)) {
+        visibility[layer.id] = map.Renderer.getLayoutProperty(
+          layer.id,
+          'visibility'
+        );
+        map.Renderer.setLayoutProperty(layer.id, 'visibility', 'none');
+      }
     });
-    /* trigger render */
+
+    map.Renderer.fitBounds(boundsThailand, { padding: 0 });
+
+    // Set the background to transparent
+    map.Renderer.setPaintProperty(
+      'background',
+      'background-color',
+      'rgba(0,0,0,0)'
+    );
+
+    // Trigger render and wait for completion
+    map.Renderer.once('render', async function () {
+      console.log('Render completed');
+
+      // Capture the screenshot from the canvas
+      const dataUrl = map.Renderer.getCanvas().toDataURL();
+
+      // Restore the original visibility of each layer
+      layers.forEach((layer) => {
+        if (!layerIds.includes(layer.id)) {
+          map.Renderer.setLayoutProperty(
+            layer.id,
+            'visibility',
+            visibility[layer.id]
+          );
+        }
+      });
+
+      // Restore the background color
+      map.Renderer.setPaintProperty(
+        'background',
+        'background-color',
+        'original_color_value'
+      );
+
+      resolve(dataUrl);
+    });
+
+    // Trigger a render to apply changes
     map.Renderer.setBearing(map.Renderer.getBearing());
   });
 };
 const getLayerImage = async () => {
-  const dataUrl = await takeScreenshot();
-  console.log(dataUrl);
+  console.log(map.Layers.list());
+  const dataUrl = await takeScreenshot(['state-fills', 'state-border']);
 
-  const link = document.createElement('a');
-  link.href = dataUrl;
-  link.download = 'map.png';
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+  mapUrl.value = dataUrl
+  // const link = document.createElement('a');
+  // link.href = dataUrl;
+  // link.download = 'map.png';
+  // document.body.appendChild(link);
+  // link.click();
+  // document.body.removeChild(link);
 };
 </script>
 
