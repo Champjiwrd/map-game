@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full">
+  <div class=" h-dvh">
     <longdo-map
       ref="longdoMap"
       class="h-full relative"
