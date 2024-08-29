@@ -95,7 +95,8 @@
         </div>
       </div>
       <div
-        class="absolute left-20 bg-white top-28 w-[450px] drop-shadow-md overflow-y-auto max-h-[80vh] p-4 rounded-xl border-b-4 border-sky-500 max-sm:hidden"
+        v-if="false"
+        class="absolute left-20 bg-white top-28 w-[450px] drop-shadow-md overflow-y-auto max-h-[80vh] p-4 rounded-xl border-b-4 border-sky-500"
       >
         <div>
           {{ currentProvinceQuestion }} / {{ provinceList.length }} ถูก:
@@ -402,8 +403,6 @@ const randomProvinceList = ref([]);
 const attempt = ref(0);
 const inCorrectContainer = ref(undefined);
 const isFinish = ref(false);
-const paddingX = 10;
-const paddingY = 5;
 const score = ref(0);
 
 const stopwatchRef = ref(null);
@@ -421,7 +420,6 @@ const colors = {
 const clickProvince = ref('');
 const onLoad = async (mapLoad) => {
   map = mapLoad;
-  map.zoomRange({ min: 5, max: 8 });
   map.Ui.Zoombar.visible(false);
   map.Ui.Geolocation.visible(false);
   map.Ui.Terrain.visible(false);
@@ -431,7 +429,7 @@ const onLoad = async (mapLoad) => {
   map.Ui.Scale.visible(false);
   map.Renderer.dragRotate.disable();
   map.Renderer.doubleClickZoom.disable();
-  map.Renderer.boxZoom.disable()
+  map.Renderer.boxZoom.disable();
   // map.Layers.setBase(window.longdo.Layers.CLEAR);
 
   const backgroundOnlyStyle = {
@@ -455,14 +453,23 @@ const onLoad = async (mapLoad) => {
   });
 
   const boundsThailand = [
-    [97.34466 - paddingX, 5.61 - paddingY],
-    [105.6393 + paddingX, 20.4632 + paddingY],
+    [97.34466, 5.61],
+    [105.6393, 20.4632],
   ];
-  // map.Layers.list().length = []
-  map.Renderer.setMaxBounds(boundsThailand);
+  map.Renderer.fitBounds(boundsThailand, {
+    padding: { top: 150, bottom: 100 },
+  });
+  setTimeout(async () => {
+    map.zoomRange({ min: map.zoom(), max: 8 });
+    const boundMap = map.bound();
+    map.Renderer.setMaxBounds([
+      [boundMap.minLon, boundMap.minLat],
+      [boundMap.maxLon, boundMap.maxLat],
+    ]);
 
-  randomProvince();
-  await readFile();
+    randomProvince();
+    await readFile();
+  }, 500);
 };
 const newGame = () => {
   attempt.value = 0;
@@ -701,11 +708,11 @@ const takeScreenshot = async () => {
   console.log('take screenshot');
   return new Promise(function (resolve, reject) {
     map.Renderer.once('render', function () {
-      console.log('render')
+      console.log('render');
       map.Renderer.on('load', async function () {
-        console.log('sleep')
+        console.log('sleep');
         await sleep(2000);
-        console.log('load')
+        console.log('load');
         resolve(map.Renderer.getCanvas().toDataURL());
       });
     });
