@@ -399,7 +399,6 @@ const colors = {
   background: '#1E2A5E',
 };
 
-const clickProvince = ref('');
 const onLoad = async (mapLoad) => {
   map = mapLoad;
   map.Ui.Zoombar.visible(false);
@@ -527,7 +526,7 @@ const addLayer = (geojson) => {
       'line-width': [
         'case',
         ['boolean', ['feature-state', 'hover'], false],
-        6,
+        3,
         3,
       ],
       'line-opacity': 1,
@@ -558,7 +557,6 @@ const stateFillsClick = (e) => {
   }
   if (currentProvinceQuestion.value === provinceList.value.length) {
     finishGame();
-    clickProvince.value = e.features[0].properties.pro_th;
   }
 };
 const onCorrect = (e) => {
