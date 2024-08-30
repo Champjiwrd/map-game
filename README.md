@@ -1,6 +1,6 @@
-# Nuxt 3 Minimal Starter
+# Map Game
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Look at the [Province Thailand Game](https://champjiwrd.github.io/map-game) to play.
 
 ## Setup
 
