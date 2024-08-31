@@ -20,7 +20,7 @@ const props = defineProps({
 const config = {
   rotationDelay: 0,
   scaleFactor: 0.75,
-  degPerSec: 50,
+  degPerSec: 30,
   angles: { x: -100, y: -10, z: 0 },
   colors: {
     water: '#1184c7',
@@ -223,6 +223,6 @@ onMounted(() => {
 
 <style scoped>
 #globe {
-  cursor: move;
+  /* cursor: move; */
 }
 </style>
