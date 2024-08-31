@@ -9,9 +9,12 @@
       <div>จังหวัด</div>
       <div>ในประเทศไทย?</div>
     </div>
+    <div>
+        <Earth :size="300"/>
+    </div>
     <div class="flex items-center justify-center">
       <div class="rounded-full bg-[#1184c7] w-60">
-        <img class="w-full" :src="SvgThailand" />
+        <!-- <img class="w-full" :src="SvgThailand" /> -->
       </div>
     </div>
     <button
@@ -26,6 +29,8 @@
 </template>
 
 <script setup>
+import Earth from './Earth.vue'
+
 import SvgPlay from '@/components/icons/Play.vue';
 import SvgThailand from '@/components/icons/thailand.svg';
 
