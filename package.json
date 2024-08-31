@@ -11,8 +11,10 @@
   },
   "dependencies": {
     "@nuxtjs/google-fonts": "^3.2.0",
+    "d3": "^7.9.0",
     "longdo-map-vue": "^3.1.0",
     "nuxt": "^3.13.0",
+    "topojson": "^3.0.2",
     "vue": "latest"
   },
   "packageManager": "yarn@1.22.19+sha1.4ba7fc5c6e704fce2066ecbfb0b0d8976fe62447",
