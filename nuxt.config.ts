@@ -35,7 +35,7 @@ export default defineNuxtConfig({
   },
   compatibilityDate: '2024-04-03',
   ssr: false,
-  devtools: { enabled: false },
+  devtools: { enabled: true },
   css: ['~/assets/css/main.css'],
   plugins: ['~/plugins/longdo-map-vue.client.js'],
   modules: ['@nuxtjs/google-fonts'],
