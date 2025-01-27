@@ -15,6 +15,16 @@ export default defineNuxtConfig({
           name: 'Province Thailand',
           content: 'ทายจังหวัด',
         },
+        {
+          property: 'og:title',
+          content:
+            'เกมทายจังหวัดประเทศไทย | เกมทดสอบความรู้ภูมิศาสตร์ไทยของคุณ',
+        },
+        {
+          property: 'og:description',
+          content:
+            'มาลองทายจังหวัดต่าง ๆ บนแผนที่ประเทศไทย ดูว่าคุณจำได้กี่จังหวัด! เกมสนุก ๆ ท้าทายความรู้ภูมิศาสตร์',
+        },
       ],
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/map-game/favicon.ico' },
@@ -40,6 +50,11 @@ export default defineNuxtConfig({
     display: 'auto',
     families: {
       Prompt: [100, 200, 300, 400, 500, 600, 700, 800, 900],
+    },
+  },
+  runtimeConfig: {
+    public: {
+      apiKey: process.env.NUXT_LONGDOMAP_KEY,
     },
   },
 });
